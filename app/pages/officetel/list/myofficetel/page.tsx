@@ -7,10 +7,11 @@ import { NextPage } from "next";
 import MoveButton from "@/app/atom/button/MoveButton";
 import { PG } from "@/app/components/common/enums/PG";
 import OfficetelColumns from "@/app/components/officetel/module/columns";
-import { findOfficetelsById } from "@/app/components/officetel/service/officetel.service";
+import { findOfficetelsById, findOfficetelsByUsername } from "@/app/components/officetel/service/officetel.service";
 import LinkButton, { linkButtonTitles } from "@/app/atom/button/LinkButton";
 import CommonHeader from "@/app/atom/button/header";
-import { getOfficetelJSON } from "@/app/components/officetel/service/officetel.slice";
+import { getOfficetelArray, getOfficetelJSON } from "@/app/components/officetel/service/officetel.slice";
+import { parseCookies } from "nookies";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -25,16 +26,19 @@ const MenuProps = {
 
 const names = ["전부", "매매", "전세", "월세"];
 
-const OfficeListPage: NextPage = ({ params }: any) => {
+const OfficeListPage: NextPage = () => {
+  console.log(parseCookies().username)
+
   const dispatch = useDispatch();
 
   const [size, setSize] = useState(10);
   const [number, setNumber] = useState(0);
 
-  const allOfficetels: [] = useSelector(getOfficetelJSON);
+  const allOfficetels: [] = useSelector(getOfficetelArray);
 
   useEffect(() => {
-    dispatch(findOfficetelsById(params.id));
+    console.log("useEffect 실행여부...")
+    dispatch(findOfficetelsByUsername());
   }, []);
 
 
@@ -47,7 +51,7 @@ const OfficeListPage: NextPage = ({ params }: any) => {
         <tbody>
           <CommonHeader />
           <div className="flex justify-center items-center h-full">
-            {linkButtonTitles.map((button) => (
+            {linkButtonTitles().map((button) => (
               <LinkButton
                 key={button.id}
                 id={button.id}
@@ -60,7 +64,7 @@ const OfficeListPage: NextPage = ({ params }: any) => {
          
           <tr>
             <td align="center" className="h-300">
-              {allOfficetels && (
+              {Array.isArray(allOfficetels) ? allOfficetels && (
                 <DataGrid
                   rows={allOfficetels}
                   columns={OfficetelColumns()}
@@ -76,22 +80,9 @@ const OfficeListPage: NextPage = ({ params }: any) => {
                   disableRowSelectionOnClick
                   disableColumnResize
                 />
-              )}
+              ): "올리신 방이 없습니다."}
             </td>
           </tr>
-          <td>
-            <button>수정</button>
-          </td>
-          <td>
-            <button>삭제</button>
-          </td>
-          <thead>
-            <tr>
-              <td colSpan={3}>
-                <MoveButton text={"글쓰기"} path={`${PG.ARTICLE}/save`} />
-              </td>
-            </tr>
-          </thead>
         </tbody>
       </table>
     </>

@@ -46,7 +46,7 @@ export const modifyAPI = async (user:any)=>{
 
 export const loginAPI = async (user:IUser)=>{
   try{
-    const response = await instance().post("/auth/login", user)
+    const response = await instance().post("/users/login", user)
     return response.data;
 
   }catch(error){return error}
@@ -54,7 +54,7 @@ export const loginAPI = async (user:IUser)=>{
 
 export const existsUsernameAPI = async (username:string)=>{
   try{
-    const response = await instance().get("/auth/exist-username", {params:{username}})
+    const response = await instance().get("/users/exist-username", {params:{username}})
     return response.data;
     
   }catch(error){return error}

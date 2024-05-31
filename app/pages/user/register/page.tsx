@@ -1,76 +1,143 @@
-import Link from "next/link";
-import React from "react";
-const RegistartionForm = () => {
+"use client";
+import axios from "axios";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { API } from "@/app/components/common/enums/API";
+import AxiosConfig from "@/app/components/common/configs/axios-config";
+import { PG } from "@/app/components/common/enums/PG";
+import { NextPage } from "next";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
+import instance from "@/app/components/common/configs/axios-config";
+const SERVER = "http://localhost:8081";
+
+const JoinPage: NextPage = () => {
+  const [username, setusername] = useState("");
+  const [password, setpassword] = useState("");
+  const [passwordConfirm, setpasswordConfirm] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [job, setjob] = useState("");
+  const [height, setheight] = useState("");
+  const [weight, setweight] = useState("");
+
+  const handleUserName = (e: any) => {
+    setusername(e.target.value);
+  };
+  const handlePassword = (e: any) => {
+    setpassword(e.target.value);
+  };
+  const handlePasswordConfirm = (e: any) => {
+    setpasswordConfirm(e.target.value);
+  };
+  const handleName = (e: any) => {
+    setName(e.target.value);
+  };
+  const handlePhone = (e: any) => {
+    setPhone(e.target.value);
+  };
+  const handleJop = (e: any) => {
+    setjob(e.target.value);
+  };
+
+  const router = useRouter();
+
+  const handleCancel = () => {};
+
+  const handleSignup = (e: any) => {
+    e.preventDefault();
+
+    console.log(username + "님 회원가입 성공");
+
+    const url = `${API.SERVER}/users/save`;
+    const data = {
+      username,
+      password,
+      passwordConfirm,
+      name,
+      phone,
+      job,
+    };
+    instance().post(url, data).then((res) => {
+      alert("회원가입 : " + JSON.stringify(res.data.message));
+      router.push(`../../`);
+    });
+  };
+
   return (
-    <div className="h-[100vh] items-center flex justify-center px-5 lg:px-0">
-      <div className="max-w-screen-xl bg-white border shadow sm:rounded-lg flex justify-center flex-1">
-        <div className="flex-1 bg-blue-900 text-center hidden md:flex">
-          <div
-            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url(https://www.tailwindtap.com/assets/common/marketing.svg)`,
-            }}
-          ></div>
-        </div>
-        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-          <div className=" flex flex-col items-center">
-            <div className="text-center">
-              <h1 className="text-2xl xl:text-4xl font-extrabold text-blue-900">
-                Student Sign up
-              </h1>
-              <p className="text-[12px] text-gray-500">
-                Hey enter your details to create your account
-              </p>
-            </div>
-            <div className="w-full flex-1 mt-8">
-              <div className="mx-auto max-w-xs flex flex-col gap-4">
-                <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="text"
-                  placeholder="Enter your name"
-                />
-                <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="email"
-                  placeholder="Enter your email"
-                />
-                <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="tel"
-                  placeholder="Enter your phone"
-                />
-                <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="password"
-                  placeholder="Password"
-                />
-                <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                  <svg
-                    className="w-6 h-6 -ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    strokeLinecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                    <circle cx="8.5" cy="7" r="4" />
-                    <path d="M20 8v6M23 11h-6" />
-                  </svg>
-                  <span className="ml-3">Sign Up</span>
-                </button>
-                <p className="mt-6 text-xs text-gray-600 text-center">
-                  Already have an account?{" "}
-                  <Link href="/">
-                    <span className="text-blue-900 font-semibold">Sign in</span>
-                  </Link>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container maxWidth="sm">
+      <Typography variant="h4" component="h1" gutterBottom>
+        회원가입
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        아래 항목을 채워주세요.
+      </Typography>
+      <Box component="form" noValidate autoComplete="off">
+        <TextField
+          fullWidth
+          label="아이디(대문자로 시작하는 6 ~ 13 문자열 (숫자, 기호 불가)"
+          name="username"
+          required
+          margin="normal"
+          onChange={handleUserName}
+        />
+        <TextField
+          fullWidth
+          label="비밀번호(소문자 시작 / 특수문자 하나 이상 / 3 ~ 12 문자열)"
+          name="psw"
+          required
+          type="password"
+          margin="normal"
+          onChange={handlePassword}
+        />
+        <TextField
+          fullWidth
+          label="비밀번호 확인"
+          name="psw-repeat"
+          required
+          type="password"
+          margin="normal"
+          onChange={handlePasswordConfirm}
+        />
+        <TextField
+          fullWidth
+          label="이름"
+          margin="normal"
+          onChange={handleName}
+        />
+        <TextField
+          fullWidth
+          label="전화 번호"
+          margin="normal"
+          onChange={handlePhone}
+        />
+        <TextField fullWidth label="직업" margin="normal" onChange={handleJop} />
+
+        <Box mt={2}>
+          <Button variant="outlined" color="secondary" onClick={handleCancel}>
+            취소
+          </Button>{" "}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSignup}
+            type="submit"
+          >
+            회원가입
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 };
-export default RegistartionForm;
+
+export default JoinPage;

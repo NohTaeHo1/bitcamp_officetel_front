@@ -32,7 +32,7 @@ export const officetelSlice = createSlice({
       }))
       .addCase(
         findOfficetelsBoundary.fulfilled,
-        (state: any, { payload }: any) => ({ ...state, Json: payload })
+        (state: any, { payload }: any) => ({ ...state, array: payload })
       )
       .addCase(findOfficetelsById.fulfilled, (state: any, { payload }: any) => ({
         ...state,
@@ -41,8 +41,7 @@ export const officetelSlice = createSlice({
   },
 });
 
-export const getOfficetelJSON = (state: any) => state.officetel.JSON; 
- 
+export const getOfficetelJSON = (state: any) => state.officetel.JSON;
 export const getOfficetelArray = (state: any) => state.officetel.array;
 
 

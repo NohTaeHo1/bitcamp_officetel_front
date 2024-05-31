@@ -48,7 +48,7 @@ export default function Home() {
   }
 
   function handlePassword(e: any) {
-    const PW_CHECK = /^[a-z](?=.*[!@#$%^&*])(?=.*[A-Z]).{3,12}$/g;
+    const PW_CHECK = /^[a-z](?=.*[!@#$%^&*]).{3,12}$/g;
 
     if (e.target.value.length === 0) {
       setIsWrongPW(false);
@@ -68,12 +68,18 @@ export default function Home() {
       .then((res: any) => {
         console.log("message : " + res.payload);
         if (res.payload == true) {
+          console.log("user id : "+ JSON.stringify(user))
           dispatch(login(user))
+          
             .then((resp: any) => {
               console.log("서버에서 넘어온 RES " + JSON.stringify(resp));
               console.log("서버에서 넘어온 메시지 1 " + resp.payload.message);
               console.log("서버에서 넘어온 토큰 1 " + resp.payload.accessToken);
               setCookie({}, "message", resp.payload.message, {
+                httpOnly: false,
+                path: "/",
+              });
+              setCookie({}, "username", user.username ?? "", {
                 httpOnly: false,
                 path: "/",
               });
@@ -88,7 +94,7 @@ export default function Home() {
               console.log("토큰을 디코드한 내용 : ");
               console.log(jwtDecode<any>(parseCookies().accessToken));
 
-              router.push("/pages/board/list");
+              router.push(`/pages/officetel/list/`);
             })
             .catch((err: any) => {
               console.log("로그인 실패");
@@ -167,7 +173,7 @@ export default function Home() {
             <p className="text-xl text-gray-600 text-center">BangEZ 로그인을 해주세요</p>
             <div className="mt-4">
               <label className="block text-gray-700 text-sm font-bold mb-2 text-left">
-                ID : Impala
+                ID : 대문자로 시작하는 6 ~ 13 문자열 (숫자, 기호 불가)
               </label>
               <input
                 onChange={handleUsername}
@@ -194,7 +200,7 @@ export default function Home() {
             <div className="mt-4 flex flex-col justify-between">
               <div className="flex justify-between">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Password : sC7@J/Py
+                  Password : 소문자로 시작 / 특수문자 하나 이상 포함 / 3 ~ 12 문자열
                 </label>
               </div>
               <input

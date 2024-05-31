@@ -4,8 +4,11 @@ import {
   findAllOfficetelsAPI,
   findOfficetelsBoundaryAPI,
   findOfficetelsByIdAPI,
+  findOfficetelsByUsernameAPI,
+  modifyOfficetelByIdAPI,
 } from "./officetel.api";
 import { OfficetelSearch } from "../model/officetel-search";
+import { OfficetelModel } from "../model/officetel-model";
 
 export const findAllOfficetels: any = createAsyncThunk(
   "officetel/findAllOfficetelsAPI",
@@ -44,3 +47,20 @@ export const deleteOfficetelsById: any = createAsyncThunk(
   }
 );
 
+export const modifyOfficetelById: any = createAsyncThunk(
+  "officetel/deleteOfficetelsByIdAPI",
+  async (row: OfficetelModel) => {
+    const data: any = await modifyOfficetelByIdAPI(row);
+    const { message, result }: any = data;
+    return data;
+  }
+);
+
+export const findOfficetelsByUsername: any = createAsyncThunk(
+  "officetel/findOfficetelsByIdAPI",
+  async () => {
+    const data: any = await findOfficetelsByUsernameAPI();
+    const { message, result }: any = data;
+    return data;
+  }
+);

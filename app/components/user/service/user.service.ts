@@ -31,7 +31,6 @@ export const modify: any = createAsyncThunk(
 export const login: any = createAsyncThunk(
     'users/login',
     async (user:IUser) => await loginAPI(user)
-
 )
 
 export const existsUsername: any = createAsyncThunk(

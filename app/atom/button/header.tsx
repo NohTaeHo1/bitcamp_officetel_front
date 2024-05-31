@@ -25,8 +25,7 @@ export default function CommonHeader() {
                 backgroundSize: "contain",
                 backgroundPosition: "top right",
               }}
-            ></td>
-
+            ></td>            
             <td
               align="center"
               className="w-1/12 p-1 h-20 text-[2px] inline-block"

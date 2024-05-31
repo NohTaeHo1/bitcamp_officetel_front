@@ -2,7 +2,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import dynamic from "next/dynamic";
-import Header from "./components/common/modeule/header";
 import { parseCookies } from "nookies";
 import DashHeader from "./components/common/modeule/dash-header";
 
@@ -31,7 +30,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="mt-100">
         <ReduxProvider > 
-        {parseCookies().message === 'SUCCESS' && <Header/>}
+        {parseCookies().message === 'SUCCESS'}
           {children}</ReduxProvider>
         </div>
       </body>

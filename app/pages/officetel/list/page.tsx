@@ -7,7 +7,7 @@ import { OfficetelModel } from "@/app/components/officetel/model/officetel-model
 import { OfficetelSearch } from "@/app/components/officetel/model/officetel-search";
 import { findAllOfficetelsAPI } from "@/app/components/officetel/service/officetel.api";
 import { findAllOfficetels, findOfficetelsBoundary } from "@/app/components/officetel/service/officetel.service";
-import { getOfficetelJSON } from "@/app/components/officetel/service/officetel.slice";
+import { getOfficetelArray, getOfficetelJSON } from "@/app/components/officetel/service/officetel.slice";
 import {
   Box,
   Button,
@@ -23,9 +23,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { parseCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { parseCookies } from "nookies";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { json } from "stream/consumers";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -39,28 +42,29 @@ const MenuProps = {
 };
 
 export default function OfficetelCards() {
+  console.log("쿠키속 유저네임 : "+parseCookies().username)
+
   const dispatch = useDispatch();
-  const allOfficetels = useSelector(getOfficetelJSON);
+  const allOfficetels = useSelector(getOfficetelArray);
 
-  console.log;
-
+  console.log("allOfficetels : "+ allOfficetels)
   useEffect(() => {
     dispatch(findAllOfficetels());
   }, []);
 
-  const [OTValues, setOTValues] = useState<number[]>([]);
-  const [PTValues, setPTValues] = useState<number[]>([]);
+  const [OTValues, setOTValues] = useState<number[]>([1, 2]);
+  const [PTValues, setPTValues] = useState<number[]>([1, 2, 3]);
   const [lowCost, setLowCost] = useState('0');
   const [maxCost, setMaxCost] = useState('999999');
   const [cost, setCost] = useState([0, 999999]);
-  const [searchInfo, setSearchInfo] = useState<OfficetelSearch>( {cost: [0, 999999]})
+  const [searchInfo, setSearchInfo] = useState<OfficetelSearch>( {OTValues: [1, 2], PTValues: [1, 2, 3], cost: [0, 999999]})
 
   const handleOTCheckboxChange = (value: number) => {
-    if (value === 4) {
-      if (OTValues.length === 3) {
+    if (value === 3) {
+      if (OTValues.length === 2) {
         setOTValues([]);
       } else {
-        setOTValues([1, 2, 3]);
+        setOTValues([1, 2]);
       }
     } else {
       if (OTValues.includes(value)) {
@@ -77,11 +81,11 @@ export default function OfficetelCards() {
   };
 
   const handlePTCheckboxChange = (value: number) => {
-    if (value === 3) {
-      if (PTValues.length === 2) {
+    if (value === 4) {
+      if (PTValues.length === 3) {
         setPTValues([]);
       } else {
-        setPTValues([1, 2]);
+        setPTValues([1, 2, 3]);
       }
     } else {
       if (PTValues.includes(value)) {
@@ -97,24 +101,28 @@ export default function OfficetelCards() {
     setPTValues(value as number[]);
   };
 
-  const isAllChecked = (value: number) => {
-    if (value === 4) {
-      return OTValues.length === 3;
+  const isOTAllChecked = (value: number) => {
+    if (value === 3) {
+      return OTValues.length === 2;
     } else {
       return OTValues.includes(value);
     }
   };
   const isPTAllChecked = (value: number) => {
-    if (value === 3) {
-      return PTValues.length === 2;
+    if (value === 4) {
+      return PTValues.length === 3;
     } else {
       return PTValues.includes(value);
     }
   };
 
   useEffect(() => {
+    setSearchInfo(i=>({...i, OTValues: OTValues, PTValues: PTValues}))
+  }, [OTValues, PTValues])
+
+  useEffect(() => {    
     dispatch(findOfficetelsBoundary(searchInfo));
-  }, [OTValues, PTValues, searchInfo]);
+  }, [searchInfo]);
 
   const handleLowCost = (e:any) => {
       setLowCost(e.target.value)
@@ -143,7 +151,7 @@ export default function OfficetelCards() {
         <tbody>
           <CommonHeader />
           <div className="flex justify-center items-center h-full">
-            {linkButtonTitles.map((button) => (
+            {linkButtonTitles().map((button) => (
               <LinkButton
                 key={button.id}
                 id={button.id}
@@ -164,8 +172,8 @@ export default function OfficetelCards() {
                   labelId="checkbox-select-label"
                   id="checkbox-select"
                   multiple
-                  value={OTValues}
-                  onChange={handleOTSelectChange}
+                  value={PTValues}
+                  onChange={handlePTSelectChange}
                   renderValue={(selected) => {
                     if (selected.length === 0) {
                       return <em>None</em>;
@@ -185,29 +193,29 @@ export default function OfficetelCards() {
                 >
                   <MenuItem value={4}>
                     <Checkbox
-                      checked={OTValues.length === 3}
-                      onChange={() => handleOTCheckboxChange(4)}
+                      checked={PTValues.length === 3}
+                      onChange={() => handlePTCheckboxChange(4)}
                     />
                     <ListItemText primary="모두" />
                   </MenuItem>
                   <MenuItem value={1}>
                     <Checkbox
-                      checked={isAllChecked(1)}
-                      onChange={() => handleOTCheckboxChange(1)}
+                      checked={isPTAllChecked(1)}
+                      onChange={() => handlePTCheckboxChange(1)}
                     />
                     <ListItemText primary="매매" />
                   </MenuItem>
                   <MenuItem value={3}>
                     <Checkbox
-                      checked={isAllChecked(3)}
-                      onChange={() => handleOTCheckboxChange(3)}
+                      checked={isPTAllChecked(3)}
+                      onChange={() => handlePTCheckboxChange(3)}
                     />
                     <ListItemText primary="전세" />
                   </MenuItem>
                   <MenuItem value={2}>
                     <Checkbox
-                      checked={isAllChecked(2)}
-                      onChange={() => handleOTCheckboxChange(2)}
+                      checked={isPTAllChecked(2)}
+                      onChange={() => handlePTCheckboxChange(2)}
                     />
                     <ListItemText primary="월세" />
                   </MenuItem>
@@ -220,8 +228,8 @@ export default function OfficetelCards() {
                   labelId="checkbox-select-label2"
                   id="checkbox-select2"
                   multiple
-                  value={PTValues}
-                  onChange={handlePTSelectChange}
+                  value={OTValues}
+                  onChange={handleOTSelectChange}
                   renderValue={(selected) => {
                     if (selected.length === 0) {
                       return <em>None</em>;
@@ -240,22 +248,22 @@ export default function OfficetelCards() {
                 >
                   <MenuItem value={3}>
                     <Checkbox
-                      checked={PTValues.length === 2}
-                      onChange={() => handlePTCheckboxChange(3)}
+                      checked={OTValues.length === 2}
+                      onChange={() => handleOTCheckboxChange(3)}
                     />
                     <ListItemText primary="모두" />
                   </MenuItem>
                   <MenuItem value={1}>
                     <Checkbox
-                      checked={isPTAllChecked(1)}
-                      onChange={() => handlePTCheckboxChange(1)}
+                      checked={isOTAllChecked(1)}
+                      onChange={() => handleOTCheckboxChange(1)}
                     />
                     <ListItemText primary="공인중개사" />
                   </MenuItem>
                   <MenuItem value={2}>
                     <Checkbox
-                      checked={isPTAllChecked(2)}
-                      onChange={() => handlePTCheckboxChange(2)}
+                      checked={isOTAllChecked(2)}
+                      onChange={() => handleOTCheckboxChange(2)}
                     />
                     <ListItemText primary="개인" />
                   </MenuItem>
@@ -312,14 +320,14 @@ export default function OfficetelCards() {
                   marginLeft: "5px"
                 }}
               >
-                (단위:천만원)
+                (단위:만원)
               </span>
               </FormControl>
             </td>
           </tr>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-            {allOfficetels?.map((officetel: OfficetelModel) => {
+            {Array.isArray(allOfficetels) ? allOfficetels?.map((officetel: OfficetelModel) => {
               return (
                 <CardButton
                   key={officetel.id}
@@ -334,7 +342,7 @@ export default function OfficetelCards() {
                   listingDate={officetel.listingDate}
                 />
               );
-            })}
+            }): "해당 조건의 방이 없습니다."}
           </div>
           <tr>
             <td

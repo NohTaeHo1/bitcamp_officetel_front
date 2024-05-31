@@ -50,6 +50,9 @@ export default function CardButton({
           </p>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
             가격 : {price}
+            
+            {/* {typeof price === 'string' ? ((parseInt(price) >=100000000 )? parseInt(price)/100000000 + " 억" + parseInt(price)/10000 + " 만" + parseInt(price)%10000000 + " 원": 
+            (parseInt(price) >=10000 )? parseInt(price)/10000 + " 만" + parseInt(price)%10000000 + " 원": parseInt(price)%10000000 + " 원") : '미정'} */}
           </p>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
             {monthlyRent !== null ? "월세 : " + monthlyRent : null}
@@ -68,7 +71,7 @@ export default function CardButton({
           </p>
           <Link
             key={id}
-            href={`${PG.ARTICLE}/list/${id}`}
+            href={`${PG.OFFICETEL}/list/${id}`}
             className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             자세히 보기
