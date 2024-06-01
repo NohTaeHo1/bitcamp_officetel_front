@@ -1,5 +1,7 @@
 import { PG } from "@/app/components/common/enums/PG";
+import { jwtDecode } from "jwt-decode";
 import Link from "next/link"
+import { parseCookies } from "nookies";
 
 interface ILinkButton{
     id:number,
@@ -24,7 +26,7 @@ export default function LinkButton ({id, title, path}:ILinkButton) {
         {id:2, title:'아파트', path:`${PG.OFFICETEL}/list`}, 
         {id:3, title:'오피스텔', path:`${PG.OFFICETEL}/list`},
         {id:4, title:'마이페이지', path:`${PG.USER}/detail/`},
-        {id:5, title:'내가 올린 매물', path:`${PG.OFFICETEL}/list/myofficetel`},
+        {id:5, title:'내가 올린 매물', path:`${PG.OFFICETEL}/list/myofficetel/`},
         {id:6, title:'매물 등록', path:`${PG.OFFICETEL}/save`}, 
 
       ];

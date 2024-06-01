@@ -23,6 +23,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
 import { parseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { parseCookies } from "nookies";
 import { useEffect, useRef, useState } from "react";
@@ -42,12 +43,11 @@ const MenuProps = {
 };
 
 export default function OfficetelCards() {
-  console.log("쿠키속 유저네임 : "+parseCookies().username)
+
 
   const dispatch = useDispatch();
   const allOfficetels = useSelector(getOfficetelArray);
 
-  console.log("allOfficetels : "+ allOfficetels)
   useEffect(() => {
     dispatch(findAllOfficetels());
   }, []);
@@ -56,7 +56,6 @@ export default function OfficetelCards() {
   const [PTValues, setPTValues] = useState<number[]>([1, 2, 3]);
   const [lowCost, setLowCost] = useState('0');
   const [maxCost, setMaxCost] = useState('999999');
-  const [cost, setCost] = useState([0, 999999]);
   const [searchInfo, setSearchInfo] = useState<OfficetelSearch>( {OTValues: [1, 2], PTValues: [1, 2, 3], cost: [0, 999999]})
 
   const handleOTCheckboxChange = (value: number) => {
@@ -122,7 +121,7 @@ export default function OfficetelCards() {
 
   useEffect(() => {    
     dispatch(findOfficetelsBoundary(searchInfo));
-  }, [searchInfo]);
+  }, [searchInfo, dispatch]);
 
   const handleLowCost = (e:any) => {
       setLowCost(e.target.value)
@@ -134,9 +133,17 @@ export default function OfficetelCards() {
 
   const handleCost = (e:any) => {
     try {
-      console.log("OTValues"+ OTValues+ "PTValues"+ PTValues+ "cost"+ cost)
-      setCost([parseInt(lowCost), parseInt(maxCost)])
-      setSearchInfo({"OTValues": OTValues, "PTValues": PTValues, "cost": cost})
+      const newCost = [parseInt(lowCost), parseInt(maxCost)];
+      setSearchInfo(i => ({ ...i, cost: newCost }));
+    } catch (error) {
+      alert("잘못된 금액입니다.")
+    }
+  }
+
+  const handleReset = (e:any) => {
+    try {
+      const newCost = [0, 9999999];
+      setSearchInfo(i => ({ ...i, cost: newCost }));
     } catch (error) {
       alert("잘못된 금액입니다.")
     }
@@ -311,6 +318,7 @@ export default function OfficetelCards() {
                 >
                   검색
                 </Button>
+                
               </FormControl>
               <FormControl>
               <span
@@ -322,6 +330,22 @@ export default function OfficetelCards() {
               >
                 (단위:만원)
               </span>
+              </FormControl>
+              
+              <FormControl
+                fullWidth
+                sx={{ width: "5%", marginLeft: "10px", marginTop: "8px" }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#1E82FF", // 배경색 설정
+                    color: "white", // 글자색 설정
+                  }}
+                  onClick={handleReset}
+                >
+                  초기화
+                </Button>
               </FormControl>
             </td>
           </tr>

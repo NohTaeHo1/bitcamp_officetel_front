@@ -1,4 +1,28 @@
+'use client'
+
+import { logout } from "@/app/components/user/service/user.service";
+import { useRouter } from "next/navigation";
+import { destroyCookie, parseCookies } from "nookies";
+import { useDispatch } from "react-redux";
+
 export default function CommonHeader() {
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+
+    const logoutHandler = () => {
+      console.log("로그아웃 적용 전 : " + parseCookies().accessToken);
+      dispatch(logout())
+        .then((res: any) => {
+          destroyCookie(null, 'accessToken')
+          router.push('../../')
+        })
+        .catch((err: any) => {
+          console.log('로그아웃 에러 : '+err)
+        });
+    };
+  
+
   return (
     <>
       <table
@@ -18,6 +42,7 @@ export default function CommonHeader() {
             ></td>
 
             <td
+              onClick={logoutHandler}
               className="w-1/12 bg-white  p-1 h-full text-[15px] inline-block"
               style={{
                 backgroundImage: "url('/user/img/logout.png')",
@@ -25,7 +50,7 @@ export default function CommonHeader() {
                 backgroundSize: "contain",
                 backgroundPosition: "top right",
               }}
-            ></td>            
+            ></td>
             <td
               align="center"
               className="w-1/12 p-1 h-20 text-[2px] inline-block"
@@ -38,9 +63,7 @@ export default function CommonHeader() {
             ></td>
           </tr>
           <tr>
-            <td
-              className="w-full bg-white  p-1 h-2 "
-            ></td>
+            <td className="w-full bg-white  p-1 h-2 "></td>
           </tr>
         </tbody>
       </table>

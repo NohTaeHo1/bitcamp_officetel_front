@@ -8,26 +8,30 @@ import {
 } from "@/app/components/user/service/user.service";
 import { getAllUsers } from "@/app/components/user/service/user.slice";
 import { Input, Typography } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
+import { parseCookies } from "nookies";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-export default function UserDetail({ params }: any) {
+export default function UserDetail() {
+  
+  const id = jwtDecode<any>(parseCookies().accessToken).userId;
   const router = useRouter();
   const dispatch = useDispatch();
   const user: IUser = useSelector(getAllUsers);
 
   useEffect(() => {
-    dispatch(findUserById(params.id));
+    dispatch(findUserById(id));
   }, []);
 
   //const [users, setUsers] = useState(user);
   const users = {...user}
 
   function deleteHandle(event: any) {
-    dispatch(deleteById(params.id), [dispatch]);
-    router.push(`${PG.USER}/list`);
+    dispatch(deleteById(id), [dispatch]);
+    router.push(`../../`);
   }
 
   function newPhone(e: any): void {
@@ -73,7 +77,7 @@ export default function UserDetail({ params }: any) {
     <div style={{ marginBottom: "1rem" }}>
       <span>ID :</span>
       <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-        {params.id}
+        {id}
       </Typography>
     </div>
     {user && (
@@ -152,13 +156,10 @@ export default function UserDetail({ params }: any) {
         </div>
         <div>
           <button onClick={deleteHandle} style={{ ...buttonStyle, backgroundColor: "#f44336" }}>
-            삭제
+            탈퇴하기
           </button>
           <button onClick={modifyHandle} style={{ ...buttonStyle, backgroundColor: "#4CAF50" }}>
             수정
-          </button>
-          <button  style={{ ...buttonStyle, backgroundColor: "#f44336" }}>
-            탈퇴
           </button>
         </div>
       </>

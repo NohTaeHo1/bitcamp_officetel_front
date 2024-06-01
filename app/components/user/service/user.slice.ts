@@ -29,9 +29,7 @@ export const initialState:UserState = {
 }
 
 const handleFulfilled = (state: any, { payload }: any) => {
-  console.log("------------------ conclusion ---------------");
   state.array = payload;
-  console.log(state.array);
 };
 
 const handlePending = (state: any) => {};

@@ -6,7 +6,6 @@ import {IUser} from "../model/user";
 export const findAllUsers: any = createAsyncThunk(
     'users/findAllUsersAPI',
     async (page:number)=>{
-        console.log('fetchAllUsers page : '+ page)
         const data:any = await findAllUsersAPI(page);
         const {message, result}:any = data
         return data

@@ -1,27 +1,20 @@
 "use client";
-import axios from "axios";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { API } from "@/app/components/common/enums/API";
-import AxiosConfig from "@/app/components/common/configs/axios-config";
-import { PG } from "@/app/components/common/enums/PG";
 import { NextPage } from "next";
 import {
   Box,
   Button,
-  Checkbox,
   Container,
-  FormControlLabel,
-  Link,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import instance from "@/app/components/common/configs/axios-config";
 import { OfficetelModel } from "@/app/components/officetel/model/officetel-model";
-import Addr from "@/app/components/common/api/KakaoPostNum";
 import { parseCookies } from "nookies";
+import AddressForm from "@/app/components/common/api/AddressForm";
 
 const SERVER = "http://localhost:8081";
 
@@ -37,7 +30,6 @@ interface IAddr {
 }
 
 const JoinPage: NextPage = () => {
-  console.log("쿠키e" + JSON.stringify(parseCookies()));
   const [newOfficetel, setNewOfficetel] = useState<OfficetelModel>({
     user: parseCookies().username,
   });
@@ -53,7 +45,6 @@ const JoinPage: NextPage = () => {
   };
   const handlePrice = (e: any) => {
     setNewOfficetel({ ...newOfficetel, price: e.target.value });
-    console.log("왜 안담겨"+JSON.stringify(newOfficetel))
 
   };
   const handleMonthlyRent = (e: any) => {
@@ -71,7 +62,6 @@ const JoinPage: NextPage = () => {
   const handleCancel = () => {};
 
   const handleSignup = (e: any) => {
-    console.log("확인하자.." + JSON.stringify(newOfficetel));
     e.preventDefault();
 
     const url = `${API.SERVER}/officetel/insert`;
@@ -82,6 +72,28 @@ const JoinPage: NextPage = () => {
         alert("매물등록 : " + JSON.stringify(res.data.message));
         router.push(`/pages/officetel/list`);
       });
+  };
+
+  const [zipCode, setZipCode] = useState('');
+  const [address, setAddress] = useState('');
+  const [addressDetail, setAddressDetail] = useState('');
+
+  const openZipSearch = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data: any) {
+        let addr = '';
+        if (data.userSelectedType === 'R') {
+          addr = data.roadAddress;
+        } else {
+          addr = data.jibunAddress;
+        }
+
+        setZipCode(data.zonecode);
+        setAddress(addr);
+        setAddressDetail('');
+        (document.getElementById('addr_dtl') as HTMLInputElement).focus();
+      },
+    }).open();
   };
 
   return (
@@ -112,12 +124,8 @@ const JoinPage: NextPage = () => {
           onChange={handleBuildingName}
         />
 
-            <Addr />
+        <AddressForm/>
 
-        <script
-          src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
-          async
-        />
         <TextField
           fullWidth
           label="매매는 1, 월세는 2, 전세는 3을 기입해 주세요."

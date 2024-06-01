@@ -124,8 +124,8 @@ export default function Home() {
   //     setCookie({}, "token", auth.token, { httpOnly: false, path: "/" });
   //     console.log("서버에서 넘어온 메시지" + parseCookies().message);
   //     console.log("서버에서 넘어온 토큰" + parseCookies().token);
-  //     console.log("토큰을 디코드한 내용 : ");
-  //     console.log(jwtDecode<any>(parseCookies().token));
+      // console.log("토큰을 디코드한 내용 : ");
+      // console.log(jwtDecode<any>(parseCookies().token));
 
   //     router.push("/pages/board/list");
   //   } else {

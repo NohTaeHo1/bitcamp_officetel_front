@@ -12,6 +12,7 @@ import LinkButton, { linkButtonTitles } from "@/app/atom/button/LinkButton";
 import CommonHeader from "@/app/atom/button/header";
 import { getOfficetelArray, getOfficetelJSON } from "@/app/components/officetel/service/officetel.slice";
 import { parseCookies } from "nookies";
+import { log } from "console";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,19 +28,21 @@ const MenuProps = {
 const names = ["전부", "매매", "전세", "월세"];
 
 const OfficeListPage: NextPage = () => {
-  console.log(parseCookies().username)
 
   const dispatch = useDispatch();
 
   const [size, setSize] = useState(10);
   const [number, setNumber] = useState(0);
 
-  const allOfficetels: [] = useSelector(getOfficetelArray);
+  // const allOfficetels: [] = useSelector(getOfficetelArray);
+  const myOfficetels: [] = useSelector(getOfficetelArray);
+  console.log("설마 ...제이슨??"+useSelector(getOfficetelJSON))
 
   useEffect(() => {
     console.log("useEffect 실행여부...")
     dispatch(findOfficetelsByUsername());
   }, []);
+
 
 
   return (
@@ -64,9 +67,9 @@ const OfficeListPage: NextPage = () => {
          
           <tr>
             <td align="center" className="h-300">
-              {Array.isArray(allOfficetels) ? allOfficetels && (
+              {Array.isArray(myOfficetels) ? myOfficetels && (
                 <DataGrid
-                  rows={allOfficetels}
+                  rows={myOfficetels}
                   columns={OfficetelColumns()}
                   initialState={{
                     pagination: {

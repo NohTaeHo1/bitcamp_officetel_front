@@ -9,7 +9,6 @@ export const findAllOfficetelsAPI = async (page: number, size: number) => {
     const response = await instance().get(`/officetel/search/`, {
       params: { q: "3" },
     });
-    console.log("개수확인용.." + JSON.stringify(response.data.list));
     return response.data.list;
   } catch (error) {
     return error;
@@ -29,7 +28,6 @@ export const findOfficetelsBoundaryAPI = async (
   const url = `/officetel/search?${queryString}`;
   try {
     const response = await instance().get(url);
-    console.log("개수확인용바운더리.." + JSON.stringify(response.data.list));
 
     return response.data.list;
   } catch (error) {
@@ -38,15 +36,12 @@ export const findOfficetelsBoundaryAPI = async (
 };
 
 export const findOfficetelsByIdAPI = async (id: number) => {
-  console.log("API"+id)
   try {
     const response = await instance().get(`/officetel/search/${id}`, {
       params: { q: "4", id: id },
     });
-    console.log("response : "+response.data.list)
     return response.data.list;
   } catch (error) {
-    console.log("안가나..?")
     return error;
   }
 }; // 이거 전체가 axios
@@ -61,7 +56,6 @@ export const deleteOfficetelsByIdAPI = async (id: number) => {
 }; // 이거 전체가 axios
 
 export const modifyOfficetelByIdAPI = async (row: OfficetelModel) => {
-  console.log(JSON.stringify(row))
   try {
     const response = await instance().post(`/officetel/modify`, {
       params: { row },
@@ -75,13 +69,11 @@ export const modifyOfficetelByIdAPI = async (row: OfficetelModel) => {
 
 export const findOfficetelsByUsernameAPI = async () => {
   const user = parseCookies().username
-
+  console.log("보내는 파람스"+JSON.stringify({params: {q: "5", user: user}}))
   try {
     const response = await instance().get(`/officetel/search/`, {params: {q: "5", user: user}});
-    console.log("response : "+response.data.list)
     return response.data.list;
   } catch (error) {
-    console.log("안가나..?")
     return error;
   }
 };
