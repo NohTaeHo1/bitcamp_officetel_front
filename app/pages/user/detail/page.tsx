@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 export default function UserDetail() {
-  
+
   const id = jwtDecode<any>(parseCookies().accessToken).userId;
   const router = useRouter();
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ export default function UserDetail() {
   }, []);
 
   //const [users, setUsers] = useState(user);
-  const users = {...user}
+  const users = { ...user }
 
   function deleteHandle(event: any) {
     dispatch(deleteById(id), [dispatch]);
@@ -48,6 +48,7 @@ export default function UserDetail() {
 
   function modifyHandle(e: any): void {
     dispatch(modify(users), []);
+    router.push(`${PG.OFFICETEL}/list`)
   }
 
   const inputStyle = {
@@ -72,99 +73,98 @@ export default function UserDetail() {
 
   return (
     <>
-       <h2 style={{ textAlign: "center" }}>{user.name}님 상세 정보</h2>
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-    <div style={{ marginBottom: "1rem" }}>
-      <span>ID :</span>
-      <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-        {id}
-      </Typography>
-    </div>
-    {user && (
-      <>
-        <div style={{ marginBottom: "1rem" }}>
-          <span>아이디 :</span>
-          <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-            {user.id}
-          </Typography>
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <span>이름 :</span>
-          <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-            {user.name}
-          </Typography>
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <span>비밀번호 :</span>
-          <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-            {user.password}
-            <br />
-            <Input
-              type="text"
-              onChange={newPassword}
-              sx={{
-                ...inputStyle,
-              }}
-            />
-          </Typography>
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <span>전화번호 :</span>
-          <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-            {user.phone}
-            <br />
-            <Input
-              type="text"
-              onChange={newPhone}
-              sx={{
-                ...inputStyle,
-              }}
-            />
-          </Typography>
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <span>직업 :</span>
-          <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-            {user.job}
-            <br />
-            <Input
-              type="text"
-              onChange={newJob}
-              sx={{
-                ...inputStyle,
-              }}
-            />
-          </Typography>
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <span>이메일 :</span>
-          <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-            {user.email}
-          </Typography>
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <span>등록일 :</span>
-          <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-            {user.regDate}
-          </Typography>
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <span>수정일 :</span>
-          <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
-            {user.modDate}
-          </Typography>
-        </div>
-        <div>
-          <button onClick={deleteHandle} style={{ ...buttonStyle, backgroundColor: "#f44336" }}>
-            탈퇴하기
-          </button>
-          <button onClick={modifyHandle} style={{ ...buttonStyle, backgroundColor: "#4CAF50" }}>
-            수정
-          </button>
-        </div>
-      </>
-    )}
-  </div>
+      <h2 style={{ textAlign: "center" }}>{user.name}님 상세 정보</h2>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+
+
+        {user && (
+          <>
+            <div style={{ marginBottom: "1rem" }}>
+              <Typography component="span" sx={{ marginRight: "0.5rem" }}>
+                아이디 :
+              </Typography>
+              <Typography component="span" sx={{ fontSize: "1.2rem", display: "inline-block" }}>
+                {user.username}
+              </Typography>
+            </div>
+
+            <div style={{ marginBottom: "1rem" }}>
+              <Typography component="span" sx={{ marginRight: "0.5rem" }}>
+                이름 :
+              </Typography>
+              <Typography component="span" sx={{ fontSize: "1.2rem", display: "inline-block" }}>
+                {user.name}
+              </Typography>
+            </div>
+            {/* <div style={{ marginBottom: "1rem" }}>
+              <span>비밀번호 :</span>
+              <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
+                <Input
+                  type="text"
+                  onChange={newPassword}
+                  defaultValue={user.password}
+                  sx={{
+                    ...inputStyle,
+                  }}
+                />
+              </Typography>
+            </div> */}
+            <div style={{ marginBottom: "1rem" }}>
+              <span>전화번호 :</span>
+              <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
+                <Input
+                  type="text"
+                  onChange={newPhone}
+                  defaultValue={user.phone}
+                  sx={{
+                    ...inputStyle,
+                  }}
+                />
+              </Typography>
+            </div>
+            <div style={{ marginBottom: "1rem" }}>
+              <span>직업 :</span>
+              <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
+                <Input
+                  type="text"
+                  onChange={newJob}
+                  defaultValue={user.job}
+                  sx={{
+                    ...inputStyle,
+                  }}
+                />
+              </Typography>
+            </div>
+            <div style={{ marginBottom: "1rem" }}>
+              <span>이메일 :</span>
+              <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
+                {user.email}
+              </Typography>
+            </div>
+            <div style={{ marginBottom: "1rem" }}>
+              <span>수정일 :</span>
+              <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
+                {user.modDate}
+              </Typography>
+            </div>
+            <div style={{ marginBottom: "1rem" }}>
+              <span>등록일 :</span>
+              <Typography textAlign="center" sx={{ fontSize: "1.5rem" }}>
+                {user.regDate}
+              </Typography>
+            </div>
+
+            <div>
+              <button onClick={deleteHandle} style={{ ...buttonStyle, backgroundColor: "#f44336" }}>
+                탈퇴하기
+              </button>
+              <button onClick={modifyHandle} style={{ ...buttonStyle, backgroundColor: "#4CAF50" }}>
+                수정
+              </button>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 }

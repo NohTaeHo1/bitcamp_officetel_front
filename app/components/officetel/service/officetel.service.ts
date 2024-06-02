@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   deleteOfficetelsByIdAPI,
   findAllOfficetelsAPI,
+  findOfficetelByIdAPI,
   findOfficetelsBoundaryAPI,
   findOfficetelsByIdAPI,
   findOfficetelsByUsernameAPI,
@@ -57,10 +58,22 @@ export const modifyOfficetelById: any = createAsyncThunk(
 );
 
 export const findOfficetelsByUsername: any = createAsyncThunk(
-  "officetel/findOfficetelsByIdAPI",
+  "officetel/findOfficetelsByUsernameAPI",
   async () => {
     const data: any = await findOfficetelsByUsernameAPI();
     const { message, result }: any = data;
+
+    return data;
+  }
+);
+
+export const findOfficetelById: any = createAsyncThunk(
+  "officetel/findOfficetelByIdAPI",
+  async (id: number) => {
+    const data: any = await findOfficetelByIdAPI(id);
+    const { message, result }: any = data;
+    console.log("서버에서 넘어오는 데이터 확인 : "+JSON.stringify(data))
+
     return data;
   }
 );

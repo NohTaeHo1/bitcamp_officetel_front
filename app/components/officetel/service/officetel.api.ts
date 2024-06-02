@@ -48,7 +48,7 @@ export const findOfficetelsByIdAPI = async (id: number) => {
 
 export const deleteOfficetelsByIdAPI = async (id: number) => {
   try {
-    const response = await instance().post(`/officetel/remove/${id}`);
+    const response = await instance().delete(`/officetel/remove/${id}`);
     return response.data.list;
   } catch (error) {
     return error;
@@ -69,9 +69,18 @@ export const modifyOfficetelByIdAPI = async (row: OfficetelModel) => {
 
 export const findOfficetelsByUsernameAPI = async () => {
   const user = parseCookies().username
-  console.log("보내는 파람스"+JSON.stringify({params: {q: "5", user: user}}))
   try {
-    const response = await instance().get(`/officetel/search/`, {params: {q: "5", user: user}});
+    const response = await instance().get(`/officetel/search`, {params: {q: "5", user: user, page: 1, size: 10}});
+    return response.data.list;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const findOfficetelByIdAPI = async (id : number) => {
+  try {
+    const response = await instance().get(`/officetel/search`, {params: {q: "4", id: id, page: 1, size: 10}});
+
     return response.data.list;
   } catch (error) {
     return error;

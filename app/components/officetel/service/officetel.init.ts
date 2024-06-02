@@ -13,5 +13,7 @@ export const initialState: OfficetelModel = {
   direction:"",
   description:"",
   owner:"",
-  listingDate:""
+  listingDate:"",
+
+
 }
