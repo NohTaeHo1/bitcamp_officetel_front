@@ -36,9 +36,11 @@ export const deleteByIdAPI = async (id:any)=>{
 
 export const modifyAPI = async (user:any)=>{
   try{
-    const response = await instance().put("/users/modify", {
-      params:{user}
-    })
+    console.log("API데이터 : "+JSON.stringify(user))
+    const response = await instance().patch("/users/modify", 
+      user
+    )
+    console.log("반응보자 :"+response.data)
     return response.data;
 
   }catch(error){return error}
@@ -55,6 +57,8 @@ export const loginAPI = async (user:IUser)=>{
 export const existsUsernameAPI = async (username:string)=>{
   try{
     const response = await instance().get("/users/exist-username", {params:{username}})
+    console.log("API에서 받아오는 아이디" + response.data)
+
     return response.data;
     
   }catch(error){return error}

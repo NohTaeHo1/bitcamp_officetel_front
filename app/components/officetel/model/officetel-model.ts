@@ -13,4 +13,5 @@ export interface OfficetelModel{
     owner?:string;
     listingDate?:string;
     user?:string
+
 }

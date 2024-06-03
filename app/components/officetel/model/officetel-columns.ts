@@ -12,4 +12,5 @@ export interface OfficetelColumn{
     description?:string;
     owner?:string;
     listingDate?:string;
+    user?:string
 }

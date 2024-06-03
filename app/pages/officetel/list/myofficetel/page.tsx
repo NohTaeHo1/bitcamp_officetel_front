@@ -34,15 +34,11 @@ const OfficeListPage: NextPage = () => {
   const [size, setSize] = useState(10);
   const [number, setNumber] = useState(0);
 
-  // const allOfficetels: [] = useSelector(getOfficetelArray);
   const myOfficetels: [] = useSelector(getOfficetelArray);
-  console.log("설마 ...제이슨??"+useSelector(getOfficetelJSON))
 
   useEffect(() => {
-    console.log("useEffect 실행여부...")
     dispatch(findOfficetelsByUsername());
   }, []);
-
 
 
   return (

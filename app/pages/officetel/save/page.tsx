@@ -15,8 +15,7 @@ import instance from "@/app/components/common/configs/axios-config";
 import { OfficetelModel } from "@/app/components/officetel/model/officetel-model";
 import { parseCookies } from "nookies";
 import AddressForm from "@/app/components/common/api/AddressForm";
-
-const SERVER = "http://localhost:8081";
+import { jwtDecode } from "jwt-decode";
 
 declare global {
   interface Window {
@@ -31,7 +30,7 @@ interface IAddr {
 
 const JoinPage: NextPage = () => {
   const [newOfficetel, setNewOfficetel] = useState<OfficetelModel>({
-    user: parseCookies().username,
+    user: parseCookies().username, owner: parseCookies().username
   });
 
   const handleOwnerType = (e: any) => {
@@ -55,6 +54,9 @@ const JoinPage: NextPage = () => {
   };
   const handleFloor = (e: any) => {
     setNewOfficetel({ ...newOfficetel, floor: e.target.value });
+  };
+  const handleDirection = (e: any) => {
+    setNewOfficetel({ ...newOfficetel, direction: e.target.value });
   };
 
   const router = useRouter();
@@ -158,6 +160,12 @@ const JoinPage: NextPage = () => {
           label="층수"
           margin="normal"
           onChange={handleFloor}
+        />
+                <TextField
+          fullWidth
+          label="방향"
+          margin="normal"
+          onChange={handleDirection}
         />
         <Box mt={2}>
           <Button variant="outlined" color="secondary" onClick={handleCancel}>

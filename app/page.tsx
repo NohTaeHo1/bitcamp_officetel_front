@@ -64,8 +64,10 @@ export default function Home() {
   }
 
   function handleSubmit() {
+
     dispatch(existsUsername(user.username))
       .then((res: any) => {
+        console.log('res: ?????'+ JSON.stringify(res))
         console.log("message : " + res.payload);
         if (res.payload == true) {
           console.log("user id : "+ JSON.stringify(user))
