@@ -2,14 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 import { initialState } from "./officetel.init";
 import {
   findAllOfficetels,
+  findOfficetelById,
   findOfficetelsBoundary,
   findOfficetelsById,
+  findOfficetelsByUsername,
 } from "./officetel.service";
 
 const officetelThunks = [
   findAllOfficetels,
   findOfficetelsBoundary,
   findOfficetelsById,
+  findOfficetelsByUsername,
+  findOfficetelById
 ];
 
 const status = {
@@ -34,9 +38,20 @@ export const officetelSlice = createSlice({
         findOfficetelsBoundary.fulfilled,
         (state: any, { payload }: any) => ({ ...state, array: payload })
       )
-      .addCase(findOfficetelsById.fulfilled, (state: any, { payload }: any) => ({
+      .addCase(findOfficetelsById.fulfilled, 
+        (state: any, { payload }: any) => ({
         ...state,
         Json: payload,
+      }))
+      .addCase(findOfficetelsByUsername.fulfilled, 
+        (state: any, { payload }: any) => ({
+        ...state,
+        array: payload,
+      }))
+      .addCase(findOfficetelById.fulfilled, 
+        (state: any, { payload }: any) => ({
+        ...state,
+        array: payload,
       }))
   },
 });

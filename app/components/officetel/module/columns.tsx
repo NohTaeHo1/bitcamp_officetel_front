@@ -5,7 +5,7 @@ import { PG } from "../../common/enums/PG";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { OfficetelColumn } from "../model/officetel-columns";
-import { deleteOfficetelsById, findOfficetelsById, modifyOfficetelById } from "../service/officetel.service";
+import { deleteOfficetelsById, findOfficetelsById, findOfficetelsByUsername, modifyOfficetelById } from "../service/officetel.service";
 
 interface CellType {
   row: OfficetelColumn;
@@ -107,11 +107,10 @@ export default function OfficetelColumns(): GridColDef[] {
             overflow-hidden relative w-full h-full font-bold -- before:block before:absolute before:h-full before:w-1/2 before:rounded-full
             before:bg-pink-400 before:top-0 before:left-1/4 before:transition-transform before:opacity-0 before:hover:opacity-100 hover:text-200 hover:before:animate-ping transition-all duration-300"
           onClick={() => {
-            confirm("article을 삭제합니다.");
-
+            confirm("해당 오피스텔을 삭제합니다.");
             dispatch(deleteOfficetelsById(row.id));
-            dispatch(findOfficetelsById(row.addressId))
-            // location.reload(); //새로고침
+            dispatch(findOfficetelsByUsername())
+            window.location.reload(); //새로고침
           }}
         >
           {" "}
@@ -133,9 +132,9 @@ export default function OfficetelColumns(): GridColDef[] {
             overflow-hidden relative w-full h-full font-bold -- before:block before:absolute before:h-full before:w-1/2 before:rounded-full
             before:bg-pink-400 before:top-0 before:left-1/4 before:transition-transform before:opacity-0 before:hover:opacity-100 hover:text-200 hover:before:animate-ping transition-all duration-300"
           onClick={() => {
-            confirm("article을 수정합니다.");
-            dispatch(modifyOfficetelById(row))
-            dispatch(findOfficetelsById(row.addressId))
+            confirm("해당 오피스텔을 수정합니다.");
+            router.push(`${PG.OFFICETEL}/modify/${row.id}`)
+
 
           }}
         >
